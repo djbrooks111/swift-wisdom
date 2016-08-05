@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 
 public protocol Mathable: Comparable {
-    func + (lhs: Self, rhs: Self) -> Self
-    func / (lhs: Self, rhs: Self) -> Self
-    func * (lhs: Self, rhs: Self) -> Self
-    func - (lhs: Self, rhs: Self) -> Self
+    static func + (lhs: Self, rhs: Self) -> Self
+    static func / (lhs: Self, rhs: Self) -> Self
+    static func * (lhs: Self, rhs: Self) -> Self
+    static func - (lhs: Self, rhs: Self) -> Self
     init(_ int: IntMax)
 }
 

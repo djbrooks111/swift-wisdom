@@ -52,7 +52,7 @@ public struct Video {
         self.fileName = fileName
         self.type = type
         self.bundle = bundle
-        guard let url = bundle.urlForResource(fileName, withExtension: type) else { return nil }
+        guard let url = bundle.url(forResource: fileName, withExtension: type) else { return nil }
         self.url = url
     }
 }
@@ -122,14 +122,14 @@ public final class VideoPlayer : UIViewController {
     
     public func finishEarly() {
         player.pause()
-        delegate?.videoPlayerDidFinish(self)
+        _ = delegate?.videoPlayerDidFinish(self)
     }
     
     // MARK: Setup
     
     private func setup() {
         setupPlayer()
-        view.backgroundColor = .white()
+        view.backgroundColor = .white
     }
     
     private func setupItemNotification(_ item: AVPlayerItem) {

@@ -43,7 +43,7 @@ extension Array {
 }
 
 extension Array {
-    public mutating func ip_removeFirst(_ matcher: @noescape (Iter ator.Element) -> Bool) {
+    public mutating func ip_removeFirst(_ matcher: @noescape (Iterator.Element) -> Bool) {
         guard let idx = index(where: matcher) else { return }
         remove(at: idx)
     }

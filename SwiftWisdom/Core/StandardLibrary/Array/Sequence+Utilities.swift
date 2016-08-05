@@ -13,7 +13,7 @@ extension Sequence {
 }
 
 extension Sequence {
-    public func ip_splitFilter(filter: @noescape (Iter ator.Element) throws -> Bool) rethrows -> (passed: [Iterator.Element], failed: [Iterator.Element]) {
+    public func ip_splitFilter(filter: @noescape (Iterator.Element) throws -> Bool) rethrows -> (passed: [Iterator.Element], failed: [Iterator.Element]) {
         var passed: [Iterator.Element] = []
         var failed: [Iterator.Element] = []
         try forEach {

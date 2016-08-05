@@ -25,7 +25,7 @@ public enum ColorDescriptor {
     case hex(hex: String)
 }
 
-extension ColorDescriptor : StringLiteralConvertible, RawRepresentable, Equatable {
+extension ColorDescriptor : ExpressibleByStringLiteral, RawRepresentable, Equatable {
     public typealias RawValue = StringLiteralType
     public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
     public typealias UnicodeScalarLiteralType = StringLiteralType

@@ -170,7 +170,6 @@ extension Data {
         guard count >= range.upperBound else { return nil }
         let rangeLength = range.upperBound - range.lowerBound
         guard rangeLength > 0 else { return nil }
-        let nsrange = NSMakeRange(range.lowerBound, rangeLength)
-        return subdata(in: nsrange)
+        return subdata(in: range)
     }
 }

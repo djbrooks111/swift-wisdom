@@ -42,7 +42,7 @@ public struct TimeOfDay {
     
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone.system
+        dateFormatter.timeZone = TimeZone.autoupdatingCurrent
         dateFormatter.locale = Locale.current
         return dateFormatter
     }()
