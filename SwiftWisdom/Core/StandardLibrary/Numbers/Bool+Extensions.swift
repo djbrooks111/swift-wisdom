@@ -14,7 +14,7 @@ extension Bool {
      */
     public init(ip_string: String) {
         let cleaned = ip_string
-            .lowercaseString
+            .lowercased()
             .characters
             .first ?? "n"
         

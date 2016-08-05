@@ -31,22 +31,22 @@ extension String {
      
      - returns: data from the hex string
      */
-    public func ip_dataFromHexadecimalString() -> NSData? {
-        let clean = lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
-        let allowed = NSCharacterSet.alphanumericCharacterSet()
-        let trimmed = clean.stringByTrimmingCharactersInSet(allowed.invertedSet)
+    public func ip_dataFromHexadecimalString() -> Data? {
+        let clean = lowercased().replacingOccurrences(of: " ", with: "")
+        let allowed = CharacterSet.alphanumerics
+        let trimmed = clean.trimmingCharacters(in: allowed.inverted)
         guard !trimmed.isEmpty && trimmed.characters.count.ip_isEven else { return nil }
         
         // everything ok, so now let's build NSData
         
         let data = NSMutableData(capacity: trimmed.characters.count / 2)
         
-        for i in 0.stride(through: trimmed.characters.count - 2, by: 2) {
+        for i in stride(from: 0, through: trimmed.characters.count - 2, by: 2) {
             let byteString = trimmed[i...i + 1]
             var byte = byteString.withCString {
                 strtoul($0, nil, 16)
             }
-            data?.appendBytes(&byte, length: sizeof(UInt8))
+            data?.append(&byte, length: sizeof(UInt8))
         }
         
         return data
@@ -54,8 +54,8 @@ extension String {
 }
 
 extension String {
-    public var ip_utf8Data: NSData? {
-        return dataUsingEncoding(NSUTF8StringEncoding)
+    public var ip_utf8Data: Data? {
+        return data(using: String.Encoding.utf8)
     }
 }
 
@@ -64,8 +64,8 @@ extension String {
         return Int(self)
     }
     
-    public func ip_contains(find: String) -> Bool {
-        return self.rangeOfString(find) != nil
+    public func ip_contains(_ find: String) -> Bool {
+        return self.range(of: find) != nil
     }
     
     public var ip_length: Int {

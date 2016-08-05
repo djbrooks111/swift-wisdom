@@ -10,7 +10,7 @@ import UIKit
 
 public extension UIColor {
     public convenience init(ip_hex hex: String) {
-        var cleanHex: String = hex.uppercaseString
+        var cleanHex: String = hex.uppercased()
         if hex.hasPrefix("#") {
             cleanHex.dropFirst()
         }
@@ -23,9 +23,9 @@ public extension UIColor {
         let bString = cleanHex[4...5]
         
         var r: CUnsignedInt = 0, g: CUnsignedInt = 0, b: CUnsignedInt = 0;
-        NSScanner(string: rString).scanHexInt(&r)
-        NSScanner(string: gString).scanHexInt(&g)
-        NSScanner(string: bString).scanHexInt(&b)
+        Scanner(string: rString).scanHexInt32(&r)
+        Scanner(string: gString).scanHexInt32(&g)
+        Scanner(string: bString).scanHexInt32(&b)
         
         
         self.init(

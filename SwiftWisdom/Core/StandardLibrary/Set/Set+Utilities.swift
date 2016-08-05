@@ -1,10 +1,10 @@
 
-public func +=<T>(inout lhs: Set<T>, rhs: Set<T>) {
+public func +=<T>(lhs: inout Set<T>, rhs: Set<T>) {
     lhs = lhs.union(rhs)
 }
 
-public func -=<T>(inout lhs: Set<T>, rhs: Set<T>) {
-    lhs = lhs.subtract(rhs)
+public func -=<T>(lhs: inout Set<T>, rhs: Set<T>) {
+    lhs = lhs.subtracting(rhs)
 }
 
 public extension Set {
@@ -12,7 +12,7 @@ public extension Set {
         return Array<Element>(self)
     }
     
-    public func ip_passesTest(@noescape test: (element: Element) -> Bool) -> Bool {
+    public func ip_passesTest(_ test: @noescape (element: Element) -> Bool) -> Bool {
         for ob in self {
             if test(element: ob) {
                 return true
@@ -21,7 +21,7 @@ public extension Set {
         return false
     }
     
-    public func ip_filter(@noescape include: (element: Element) -> Bool) -> Set<Element> {
+    public func ip_filter(_ include: @noescape (element: Element) -> Bool) -> Set<Element> {
         var filtered = Set<Element>()
         for ob in self {
             if include(element: ob) {

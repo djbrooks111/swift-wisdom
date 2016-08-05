@@ -10,25 +10,25 @@ import Foundation
 
 public final class DirectoryManager {
     
-    enum Error : ErrorType {
-        case UnableToCreatePath(url: NSURL)
+    enum Error : Error {
+        case unableToCreatePath(url: URL)
     }
     
     private let directoryName: String
-    private let fileManager: NSFileManager
-    private let directoryUrl: NSURL
+    private let fileManager: FileManager
+    private let directoryUrl: URL
     
     // MARK: All Files
     
     public var allFilesInDirectory: [String] {
         guard let path = directoryUrl.path else { return [] }
-        let all = try? fileManager.subpathsOfDirectoryAtPath(path)
+        let all = try? fileManager.subpathsOfDirectory(atPath: path)
         return all ?? []
     }
     
     // MARK: Initializer
     
-    public init(directoryName: String, fileManager: NSFileManager = NSFileManager.defaultManager()) {
+    public init(directoryName: String, fileManager: FileManager = FileManager.default) {
         self.directoryName = directoryName
         self.fileManager = fileManager
         // Should fail if not available
@@ -37,24 +37,24 @@ public final class DirectoryManager {
     
     // MARK: Move
     
-    public func moveFileIntoDirectory(originUrl originUrl: NSURL, targetName: String) throws {
-        let filePath = directoryUrl.URLByAppendingPathComponent(targetName)
+    public func moveFileIntoDirectory(originUrl: URL, targetName: String) throws {
+        let filePath = directoryUrl.appendingPathComponent(targetName)
         guard let originPath = originUrl.path, targetPath = filePath.path else { return }
-        if fileManager.fileExistsAtPath(targetPath) {
+        if fileManager.fileExists(atPath: targetPath) {
             try deleteFileWithName(targetName)
         }
-        try fileManager.moveItemAtPath(originPath, toPath: targetPath)
+        try fileManager.moveItem(atPath: originPath, toPath: targetPath)
     }
     
     // MARK: Write
     
-    public func writeData(data: NSData, withName name: String = NSUUID().UUIDString) -> Bool {
-        let filePath = directoryUrl.URLByAppendingPathComponent(name)
+    public func writeData(_ data: Data, withName name: String = UUID().uuidString) -> Bool {
+        let filePath = directoryUrl.appendingPathComponent(name)
         guard let path = filePath.path else { return false }
-        return data.writeToFile(path, atomically: true)
+        return ((try? data.write(to: URL(fileURLWithPath: path), options: [.dataWritingAtomic])) != nil)
     }
     
-    public func writeDataInBackground(data: NSData, withName name: String = NSUUID().UUIDString, completion: (fileName: String, success: Bool) -> Void = { _ in }) {
+    public func writeDataInBackground(_ data: Data, withName name: String = UUID().uuidString, completion: (fileName: String, success: Bool) -> Void = { _ in }) {
         Background {
             let success = self.writeData(data, withName: name)
             Main {
@@ -65,35 +65,35 @@ public final class DirectoryManager {
     
     // MARK: Delete
     
-    public func deleteFileWithName(fileName: String) throws {
-        let fileUrl = directoryUrl.URLByAppendingPathComponent(fileName)
+    public func deleteFileWithName(_ fileName: String) throws {
+        let fileUrl = directoryUrl.appendingPathComponent(fileName)
         guard let path = fileUrl.path else {
-            throw Error.UnableToCreatePath(url: fileUrl)
+            throw Error.unableToCreatePath(url: fileUrl)
         }
-        try fileManager.removeItemAtPath(path)
+        try fileManager.removeItem(atPath: path)
     }
     
     // MARK: Fetch
     
-    public func fetchFileWithName(fileName: String) -> NSData? {
-        let filePath = directoryUrl.URLByAppendingPathComponent(fileName)
+    public func fetchFileWithName(_ fileName: String) -> Data? {
+        let filePath = directoryUrl.appendingPathComponent(fileName)
         guard let path = filePath.path else { return nil }
-        return NSData(contentsOfFile: path)
+        return (try? Data(contentsOf: URL(fileURLWithPath: path)))
     }
 }
 
-extension NSFileManager {
-    private func directoryPathWithName(directoryName: String) throws -> NSURL {
-        let pathsArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        guard let pathString = pathsArray.first, let documentsDirectoryPath = NSURL(string: pathString) else { fatalError("Unable to create directory") }
-        let directoryPath = documentsDirectoryPath.URLByAppendingPathComponent(directoryName)
+extension FileManager {
+    private func directoryPathWithName(_ directoryName: String) throws -> URL {
+        let pathsArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        guard let pathString = pathsArray.first, let documentsDirectoryPath = URL(string: pathString) else { fatalError("Unable to create directory") }
+        let directoryPath = documentsDirectoryPath.appendingPathComponent(directoryName)
         try createDirectoryIfNecessary(directoryPath)
         return directoryPath
     }
     
-    private func createDirectoryIfNecessary(directoryPath: NSURL) throws {
-        guard let path = directoryPath.path else { throw DirectoryManager.Error.UnableToCreatePath(url: directoryPath) }
-        guard !fileExistsAtPath(path) else { return }
-        try createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+    private func createDirectoryIfNecessary(_ directoryPath: URL) throws {
+        guard let path = directoryPath.path else { throw DirectoryManager.Error.unableToCreatePath(url: directoryPath) }
+        guard !fileExists(atPath: path) else { return }
+        try createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
     }
 }

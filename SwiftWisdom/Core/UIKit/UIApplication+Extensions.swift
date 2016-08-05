@@ -11,7 +11,7 @@ import UIKit
 extension UIApplication {
     public func ip_openSettingsApp() {
         guard
-            let url = NSURL(string: UIApplicationOpenSettingsURLString)
+            let url = URL(string: UIApplicationOpenSettingsURLString)
             where canOpenURL(url)
             else { fatalError("Unable to go to settings") }
         

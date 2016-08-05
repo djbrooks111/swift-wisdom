@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension IntegerType {
+extension Integer {
     public var ip_isEven: Bool {
         return (self % 2) == 0
     }
@@ -18,8 +18,8 @@ extension IntegerType {
     }
 }
 
-extension IntegerType {
-    public func ip_times(@noescape closure: Block) {
+extension Integer {
+    public func ip_times(_ closure: @noescape Block) {
         precondition(self >= 0)
         (0..<self).forEach { _ in closure() }
     }
