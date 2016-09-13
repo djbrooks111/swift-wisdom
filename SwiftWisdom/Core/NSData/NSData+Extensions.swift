@@ -36,13 +36,13 @@ public extension Data {
     
     public var ip_intValue: Int? {
         var val: Int = 0
-        getBytes(&val, length: sizeof(Int))
+        getBytes(&val, length: sizeof(Int.self))
         return val
     }
     
     public var ip_uint8Value: UInt8? {
         var val: UInt8 = 0
-        getBytes(&val, length: sizeof(UInt8))
+        getBytes(&val, length: sizeof(UInt8.self))
         return val
     }
     
@@ -154,7 +154,7 @@ extension Data {
 extension NSMutableData {
     public func ip_appendByte(_ byte: UInt8) {
         var byte = byte
-        append(&byte, length: sizeof(UInt8))
+        append(&byte, length: sizeof(UInt8.self))
     }
     
     public func appendUTF8String(_ string: String) {

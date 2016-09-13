@@ -39,7 +39,7 @@ public final class DirectoryManager {
     
     public func moveFileIntoDirectory(originUrl: URL, targetName: String) throws {
         let filePath = directoryUrl.appendingPathComponent(targetName)
-        guard let originPath = originUrl.path, targetPath = filePath.path else { return }
+        guard let originPath = originUrl.path, let targetPath = filePath.path else { return }
         if fileManager.fileExists(atPath: targetPath) {
             try deleteFileWithName(targetName)
         }
@@ -54,11 +54,11 @@ public final class DirectoryManager {
         return ((try? data.write(to: URL(fileURLWithPath: path), options: [.dataWritingAtomic])) != nil)
     }
     
-    public func writeDataInBackground(_ data: Data, withName name: String = UUID().uuidString, completion: (fileName: String, success: Bool) -> Void = { _ in }) {
+    public func writeDataInBackground(_ data: Data, withName name: String = UUID().uuidString, completion: (_ fileName: String, _ success: Bool) -> Void = { _ in }) {
         Background {
             let success = self.writeData(data, withName: name)
             Main {
-                completion(fileName: name, success: success)
+                completion(name, success)
             }
         }
     }

@@ -12,19 +12,19 @@ public extension Set {
         return Array<Element>(self)
     }
     
-    public func ip_passesTest(_ test: @noescape (element: Element) -> Bool) -> Bool {
+    public func ip_passesTest(_ test: (_ element: Element) -> Bool) -> Bool {
         for ob in self {
-            if test(element: ob) {
+            if test(ob) {
                 return true
             }
         }
         return false
     }
     
-    public func ip_filter(_ include: @noescape (element: Element) -> Bool) -> Set<Element> {
+    public func ip_filter(_ include: (_ element: Element) -> Bool) -> Set<Element> {
         var filtered = Set<Element>()
         for ob in self {
-            if include(element: ob) {
+            if include(ob) {
                 filtered.insert(ob)
             }
         }

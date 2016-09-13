@@ -24,7 +24,7 @@ public class TimeoutOperation : Foundation.Operation {
     public init(duration: TimeInterval = 30,
                 runQueue: DispatchQueue = DispatchQueue.main,
                 timeoutQueue: OperationQueue = OperationQueue(),
-                block: Block) {
+                block: @escaping Block) {
         
         self.duration = duration
         self.block = block
@@ -36,7 +36,7 @@ public class TimeoutOperation : Foundation.Operation {
     
     override public func main() {
         After(duration, on: queue) { [weak self] in
-            if let cancelled = self?.isCancelled, let block = self?.block where !cancelled {
+            if let cancelled = self?.isCancelled, let block = self?.block, !cancelled {
                 block()
             }
         }

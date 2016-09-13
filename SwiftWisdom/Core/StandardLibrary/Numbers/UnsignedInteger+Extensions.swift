@@ -68,7 +68,7 @@ extension UnsignedInteger {
     }
     
     public static var ip_maximumNumberOfBits: Self {
-        let size = UIntMax(sizeof(self))
+        let size = UIntMax(MemoryLayout<self>.size)
         return Self(size) * 8
     }
     
@@ -99,7 +99,7 @@ extension UnsignedInteger {
     public init<T : UnsignedInteger>(ip_safely value: T) {
         self = 0
         
-        let maxSelf = self.dynamicType.ip_maxValue
+        let maxSelf = type(of: self).ip_maxValue
         if maxSelf.toUIntMax() >= value.toUIntMax() {
             self = .init(value.toUIntMax())
         } else {

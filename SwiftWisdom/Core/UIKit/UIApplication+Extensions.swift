@@ -12,7 +12,7 @@ extension UIApplication {
     public func ip_openSettingsApp() {
         guard
             let url = URL(string: UIApplicationOpenSettingsURLString)
-            where canOpenURL(url)
+            , canOpenURL(url)
             else { fatalError("Unable to go to settings") }
         
         openURL(url)

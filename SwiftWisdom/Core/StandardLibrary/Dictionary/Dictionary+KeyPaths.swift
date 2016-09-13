@@ -16,7 +16,7 @@ public extension Dictionary {
             if let settable = subdict as? Value {
                 self[first] = settable
             } else {
-                print("Unable to set value: \(subdict) to dictionary of type: \(self.dynamicType)")
+                print("Unable to set value: \(subdict) to dictionary of type: \(type(of: self))")
             }
         }
         
@@ -25,7 +25,7 @@ public extension Dictionary {
     public func ip_valueForKeyPath<T>(_ keyPath: String) -> T? {
         var keys = keyPath.ip_keypathComponents()
         guard let first = keys.first as? Key else { print("Unable to use string as key on type: \(Key.self)"); return nil }
-        guard let value = self[first] as? AnyObject else { return nil }
+        guard let value = self[first] else { return nil }
         keys.remove(at: 0)
         if !keys.isEmpty, let subDict = value as? [String : AnyObject] {
             let rejoined = keys.joined(separator: ".")

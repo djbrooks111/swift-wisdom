@@ -19,7 +19,7 @@ extension Integer {
 }
 
 extension Integer {
-    public func ip_times(_ closure: @noescape Block) {
+    public func ip_times(_ closure: @escaping Block) {
         precondition(self >= 0)
         (0..<self).forEach { _ in closure() }
     }

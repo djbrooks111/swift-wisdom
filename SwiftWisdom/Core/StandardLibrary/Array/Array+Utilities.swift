@@ -9,9 +9,9 @@ public extension Array {
         return subArray
     }
 
-    public func ip_passesTest(_ test: @noescape (element: Element) -> Bool) -> Bool {
+    public func ip_passesTest(_ test: (_ element: Element) -> Bool) -> Bool {
         for ob in self {
-            if test(element: ob) {
+            if test(ob) {
                 return true
             }
         }
@@ -43,7 +43,7 @@ extension Array {
 }
 
 extension Array {
-    public mutating func ip_removeFirst(_ matcher: @noescape (Iterator.Element) -> Bool) {
+    public mutating func ip_removeFirst(_ matcher: (Iterator.Element) -> Bool) {
         guard let idx = index(where: matcher) else { return }
         remove(at: idx)
     }
