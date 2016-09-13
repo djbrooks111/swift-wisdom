@@ -6,8 +6,8 @@ use_frameworks!
 
 def commonpods
   pod 'IP-UIKit-Wisdom'
-  pod 'RxSwift', :git => 'https://github.com/ReactiveX/RxSwift.git', :branch => "swift-3.0"
-  pod 'RxCocoa', :git => 'https://github.com/ReactiveX/RxSwift.git', :branch => "swift-3.0"
+  pod 'RxSwift', :git => 'https://github.com/ReactiveX/RxSwift.git'
+  pod 'RxCocoa', :git => 'https://github.com/ReactiveX/RxSwift.git'
 end
 
 target 'SwiftWisdom' do
