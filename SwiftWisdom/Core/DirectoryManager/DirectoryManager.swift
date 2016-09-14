@@ -21,8 +21,7 @@ public final class DirectoryManager {
     // MARK: All Files
     
     public var allFilesInDirectory: [String] {
-        guard let path = directoryUrl.path else { return [] }
-        let all = try? fileManager.subpathsOfDirectory(atPath: path)
+        let all = try? fileManager.subpathsOfDirectory(atPath: directoryUrl.path)
         return all ?? []
     }
     
@@ -32,6 +31,7 @@ public final class DirectoryManager {
         self.directoryName = directoryName
         self.fileManager = fileManager
         // Should fail if not available
+        // fileManager.path
         self.directoryUrl = try! fileManager.directoryPathWithName(directoryName)
     }
     
@@ -39,22 +39,20 @@ public final class DirectoryManager {
     
     public func moveFileIntoDirectory(originUrl: URL, targetName: String) throws {
         let filePath = directoryUrl.appendingPathComponent(targetName)
-        guard let originPath = originUrl.path, let targetPath = filePath.path else { return }
-        if fileManager.fileExists(atPath: targetPath) {
+        if fileManager.fileExists(atPath: filePath.path) {
             try deleteFileWithName(targetName)
         }
-        try fileManager.moveItem(atPath: originPath, toPath: targetPath)
+        try fileManager.moveItem(atPath: originUrl.path, toPath: filePath.path)
     }
     
     // MARK: Write
     
     public func writeData(_ data: Data, withName name: String = UUID().uuidString) -> Bool {
         let filePath = directoryUrl.appendingPathComponent(name)
-        guard let path = filePath.path else { return false }
-        return ((try? data.write(to: URL(fileURLWithPath: path), options: [.dataWritingAtomic])) != nil)
+        return ((try? data.write(to: URL(fileURLWithPath: filePath.path), options: [.atomicWrite])) != nil)
     }
     
-    public func writeDataInBackground(_ data: Data, withName name: String = UUID().uuidString, completion: (_ fileName: String, _ success: Bool) -> Void = { _ in }) {
+    public func writeDataInBackground(_ data: Data, withName name: String = UUID().uuidString, completion: @escaping (_ fileName: String, _ success: Bool) -> Void = { _ in }) {
         Background {
             let success = self.writeData(data, withName: name)
             Main {
@@ -67,18 +65,14 @@ public final class DirectoryManager {
     
     public func deleteFileWithName(_ fileName: String) throws {
         let fileUrl = directoryUrl.appendingPathComponent(fileName)
-        guard let path = fileUrl.path else {
-            throw Error.unableToCreatePath(url: fileUrl)
-        }
-        try fileManager.removeItem(atPath: path)
+        try fileManager.removeItem(atPath: fileUrl.path)
     }
     
     // MARK: Fetch
     
     public func fetchFileWithName(_ fileName: String) -> Data? {
         let filePath = directoryUrl.appendingPathComponent(fileName)
-        guard let path = filePath.path else { return nil }
-        return (try? Data(contentsOf: URL(fileURLWithPath: path)))
+        return (try? Data(contentsOf: URL(fileURLWithPath: filePath.path)))
     }
 }
 
@@ -92,8 +86,7 @@ extension FileManager {
     }
     
     private func createDirectoryIfNecessary(_ directoryPath: URL) throws {
-        guard let path = directoryPath.path else { throw DirectoryManager.Error.unableToCreatePath(url: directoryPath) }
-        guard !fileExists(atPath: path) else { return }
-        try createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+        guard !fileExists(atPath: directoryPath.path) else { return }
+        try createDirectory(atPath: directoryPath.path, withIntermediateDirectories: false, attributes: nil)
     }
 }

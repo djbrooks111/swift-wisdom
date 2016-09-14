@@ -9,24 +9,24 @@ import Foundation
 
 // MARK: Now
 
-public func Main(_ function: Block) {
+public func Main(_ function: @escaping Block) {
     DispatchQueue.main.async(execute: function)
 }
 
-public func Background(_ function: Block) {
+public func Background(_ function: @escaping Block) {
     DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async(execute: function)
 }
 
 // MARK: Later
 
-public func After(_ after: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, op: Block) {
+public func After(_ after: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, op: @escaping Block) {
     let seconds = Int64(after * Double(NSEC_PER_SEC))
     let dispatchTime = DispatchTime.now() + Double(seconds) / Double(NSEC_PER_SEC)
     
     queue.asyncAfter(deadline: dispatchTime, execute: op)
 }
 
-public func RepeatAtInterval(_ interval: TimeInterval, numberOfTimes: Int, op: () -> (), on queue: DispatchQueue = DispatchQueue.main, completion: (Void) -> Void = {}) {
+public func RepeatAtInterval(_ interval: TimeInterval, numberOfTimes: Int, op: @escaping () -> (), on queue: DispatchQueue = DispatchQueue.main, completion: @escaping (Void) -> Void = {}) {
     let numberOfTimesLeft = numberOfTimes - 1
     
     let wrappedCompletion: (Void) -> Void
